@@ -1,0 +1,1 @@
+let my_api_server_url = 'http://localhost:9900/';
