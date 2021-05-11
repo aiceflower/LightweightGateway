@@ -1,14 +1,14 @@
-#ifndef OPEN_WBCRYPTO_CONF_H
-#define OPEN_WBCRYPTO_CONF_H
+#ifndef WBCRYPTO_CONF_H
+#define WBCRYPTO_CONF_H
 
 #include <stddef.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "openwbcrypto/error.h"
-#include "openwbcrypto/modes.h"
-#include "openwbcrypto/utils.h"
+#include <wbcrypto/error.h>
+#include <wbcrypto/modes.h>
+#include <wbcrypto/utils.h>
 
 //encryption mdoes
 #define WBCRYPTO_ENCREYT_MODE 1
@@ -26,6 +26,8 @@
 #define WBCRYPTO_TEST_FDEC_PATH "F:\\test\\test.dec.txt"
 
 // #define WBCRYPTO_TEST_KEY_FPATH "/mnt/f/test/key.whibox"
-#define WBCRYPTO_TEST_KEY_FPATH "F:\\test\\key.whibox"
+#define WBCRYPTO_TEST_ENC_KEY_FPATH "F:\\test\\enckey.whibox"
+#define WBCRYPTO_TEST_DEC_KEY_FPATH "F:\\test\\deckey.whibox"
 
-#endif //OPEN_WBCRYPTO_CONF_H
+
+#endif //WBCRYPTO_CONF_H

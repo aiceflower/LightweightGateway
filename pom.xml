@@ -123,6 +123,7 @@
     </dependencies>
 
     <build>
+        <finalName>lightweight-gateway</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

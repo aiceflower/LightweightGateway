@@ -1,12 +1,12 @@
-#ifndef OPEN_WBCRYPTO_MODES_H
-#define OPEN_WBCRYPTO_MODES_H
+#ifndef WBCRYPTO_MODES_H
+#define WBCRYPTO_MODES_H
 
 #include <stddef.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "openwbcrypto/error.h"
+#include <wbcrypto/error.h>
 
 #ifdef  __cplusplus
 extern "C" {
@@ -218,4 +218,4 @@ extern "C" {
 }
 #endif
 
-#endif //OPEN_WBCRYPTO_MODES_H
+#endif //WBCRYPTO_MODES_H

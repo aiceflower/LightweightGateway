@@ -1,6 +1,6 @@
 package com.scnu.lwg.controller;
 
-import com.scnu.lwg.jni.JniTest;
+import com.scnu.lwg.util.CryptoUtils;
 import com.scnu.lwg.util.OkHttpCli;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,23 +20,10 @@ import javax.annotation.Resource;
 public class TestController {
 
 	@Resource
-	JniTest jt;
-
-	@Resource
 	OkHttpCli okHttpCli;
 
-	/**
-	 * test jni
-	 *
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	@GetMapping(value = "/add")
-	public Integer add(int x, int y) {
-		int res = jt.add(x, y);
-		return res;
-	}
+	@Resource
+	CryptoUtils cryptoUtils;
 
 	/**
 	 * test okhttp3
@@ -49,4 +36,35 @@ public class TestController {
 		return message;
 	}
 
+	/**
+	 * test sm3
+	 * @param str
+	 * @return
+	 */
+	@GetMapping(value = "/sm3")
+	public String sm3(String str) {
+		String s = cryptoUtils.wbSm4Enc(str);
+		String plan = cryptoUtils.wbSm4Dec(s);
+		return plan + " " + CryptoUtils.sm3(str) ;
+	}
+
+	/**
+	 * test encrypt
+	 * @param str
+	 * @return
+	 */
+	@GetMapping(value = "/enc")
+	public String enc(String str) {
+		return cryptoUtils.wbSm4Enc(str);
+	}
+
+	/**
+	 * test decrypt
+	 * @param str
+	 * @return
+	 */
+	@GetMapping(value = "/dec")
+	public String dec(String str) {
+		return cryptoUtils.wbSm4Dec(str);
+	}
 }

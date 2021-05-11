@@ -1,9 +1,11 @@
 package com.scnu.lwg.web.controller;
 
+import com.scnu.lwg.config.ResponseCode;
 import com.scnu.lwg.config.Result;
 import com.scnu.lwg.web.entity.Humiture;
 import com.scnu.lwg.web.service.HumitureService;
 import com.scnu.lwg.web.vo.HumitureVo;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,6 +22,15 @@ public class HumitureController {
 
 	@Resource
 	HumitureService humitureService;
+
+	@PostMapping("/send")
+	public Result send(String data) {
+		if (StringUtils.isEmpty(data)){
+			return Result.fail(ResponseCode.REQUEST_PARAM_ERROR);
+		}
+		humitureService.send(data);
+		return Result.success(null);
+	}
 
 	@PostMapping("/save")
 	public Result save(@RequestBody Humiture humiture) {

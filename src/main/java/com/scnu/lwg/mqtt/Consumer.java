@@ -1,12 +1,23 @@
 package com.scnu.lwg.mqtt;
 
+import com.scnu.lwg.util.CryptoUtils;
+import com.scnu.lwg.util.JSONUtils;
+import com.scnu.lwg.util.OkHttpCli;
+import com.scnu.lwg.web.util.SignUtil;
+import com.scnu.lwg.web.vo.HumitureMqttVo;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Kin
@@ -37,6 +48,13 @@ public class Consumer {
 	 */
 	@Value("${mqtt.start}")
 	private boolean start;
+	@Value("${mqtt.url}")
+	private String url;
+	@Resource
+	OkHttpCli httpCli;
+
+	@Resource
+	CryptoUtils cryptoUtils;
 
 	@PostConstruct
 	public void init() throws MqttException {
@@ -56,9 +74,37 @@ public class Consumer {
 
 				@Override
 				public void messageArrived(String s, MqttMessage mqttMessage) {
-					//TODO 处理消息
-					System.out.println("From topic: " + s);
-					System.out.println("Message content: " + new String(mqttMessage.getPayload()));
+					String msg = new String(mqttMessage.getPayload());
+					if (StringUtils.isEmpty(msg)){
+						log.error("receive error msg.");
+						return;
+					}
+
+					HumitureMqttVo humiture = null;
+					try {
+						humiture = JSONUtils.jsonToObj(msg, HumitureMqttVo.class);
+					} catch (IOException e) {
+						log.error("parse message {} error.", msg);
+					}
+
+					log.info("From topic: {} , Receive msg {}", s, msg);
+					HumitureMqttVo vo = new HumitureMqttVo();
+					vo.setDeviceId(humiture.getDeviceId());
+					vo.setHumidity(humiture.getHumidity());
+					vo.setTemperature(humiture.getTemperature());
+					vo.setCreateTime(new Date());
+					vo.setSign(SignUtil.sign(humiture));
+					String token = humiture.getToken();
+					if (StringUtils.isEmpty(token)){
+						log.error("invalid request. token is null.");
+						return;
+					}
+					String str = JSONUtils.objToJson(vo);
+					Map<String, String> param = new HashMap<>(1);
+					param.put("data", cryptoUtils.wbSm4Enc(str));
+					param.put("token", token);
+					String resp = httpCli.doPost(url, param);
+					log.info("msg {} request finished, the response is {}", msg, resp);
 				}
 
 				@Override

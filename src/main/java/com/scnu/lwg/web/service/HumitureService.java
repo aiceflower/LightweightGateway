@@ -31,4 +31,10 @@ public interface HumitureService {
 	 * @return
 	 */
 	HumitureVo getData(String range, String time);
+
+	/**
+	 * 处理温湿度数据
+	 * @param data
+	 */
+	void send(String data);
 }

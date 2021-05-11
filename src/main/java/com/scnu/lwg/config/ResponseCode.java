@@ -22,6 +22,8 @@ public enum ResponseCode {
 	APP_SECRET_NOT_EFFECTIVE("1003", "appSecret is not effective!"),
 	TOKEN_REFRESH_ERROR("1004", "need refresh token"),
 	TOKEN_PARSE_ERROR("1005", "token parse error. please get token again."),
+
+	REQUEST_PARAM_ERROR("1006", "request params error."),
 	;
 	ResponseCode(String code, String msg){
 		this.code = code;

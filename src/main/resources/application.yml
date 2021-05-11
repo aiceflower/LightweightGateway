@@ -18,9 +18,10 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/xtjtest?characterEncoding=utf8
-    username: xtjtest
-    password: xtjtest123
+    #create user 'lwgtest'@'%' identified by '!@#Lwgtest2021';#创建用户
+    url: jdbc:mysql://39.96.89.236:3306/lwg?characterEncoding=utf8
+    username: lwgtest
+    password: '!@#Lwgtest2021'
     #max active
     maxActive: 20
     #init size
@@ -76,6 +77,7 @@ lwg:
 mqtt:
   broker: tcp://39.96.89.236:1883 #url
   start: true #start server
+  url: http://localhost:9900/lwg/humiture/send
 
 # okhttp
 ok:
