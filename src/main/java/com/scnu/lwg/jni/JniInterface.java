@@ -1,7 +1,6 @@
 package com.scnu.lwg.jni;
 
-import java.io.File;
-import java.net.URL;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Kin
@@ -9,21 +8,45 @@ import java.net.URL;
  * @email kinsanities@sina.com
  * @time 2021/5/9 12:03 下午
  */
-
+@Slf4j
 public class JniInterface {
 
+	static volatile boolean loadStatus = false;
+
+	public synchronized void loadLibs(String cryptoPath, String jniPath){
+		if (loadStatus){
+			return;
+		}
+		loadStatus = true;
+		System.out.println("load crypto lib in path:" + cryptoPath);
+		System.out.println("load jni lib in path:" + jniPath);
+		log.info("load crypto lib in path:{}", cryptoPath);
+		log.info("load jni lib in path:{}", jniPath);
+		try {
+			System.load(cryptoPath);
+			System.load(jniPath);
+		}catch (Exception e){
+			log.error("load lib error.");
+			e.printStackTrace();
+		}
+	}
+
+	public static boolean isLoadStatus() {
+		return loadStatus;
+	}
+
+	/**
 	static {
 		URL url = Thread.currentThread().getContextClassLoader().getResource("native");
 		String path = url.getPath();
-		/**
-		 * 加载加解密库
-		 */
-		System.load(path + File.separator + "libwbcrypto.dylib");
-		/**
-		 * 加载jni库
-		 */
-		System.load(path + File.separator + "main.so");
+
+		///System.load(path + File.separator + "libwbcrypto.dylib");
+		System.loadLibrary("wbcrypto");
+
+		///System.load(path + File.separator + "main.so");
+		System.loadLibrary("main");
 	}
+	*/
 
 	/**
 	 * gen table

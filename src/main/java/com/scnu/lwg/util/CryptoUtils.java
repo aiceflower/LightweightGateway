@@ -1,7 +1,10 @@
 package com.scnu.lwg.util;
 
 import com.scnu.lwg.jni.JniInterface;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 
 /**
@@ -12,6 +15,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CryptoUtils {
+
+	@Value("${mqtt.lib.crypto}")
+	private String libCryptoPath;
+
+	@Value("${mqtt.lib.jni}")
+	private String libJniPath;
+
+	@Value("${mqtt.wb.filepath}")
+	private String filePath;
 
 	/**
 	 * alias
@@ -58,7 +70,7 @@ public class CryptoUtils {
 	 */
 	public int initWithFile(){
 		if (!this.inited){
-			byte[] bytes = FileUtils.fileConvertToByteArray();
+			byte[] bytes = FileUtils.fileConvertToByteArray(filePath);
 			return initWithBox(bytes);
 		}
 		return 0;
@@ -115,5 +127,10 @@ public class CryptoUtils {
 	public static String sm3(String msg){
 		byte[] hash = JniInterface.sm3(msg);
 		return ByteUtils.bytes2Hex(hash);
+	}
+
+	@PostConstruct
+	public void loadJniLib(){
+		new JniInterface().loadLibs(libCryptoPath, libJniPath);
 	}
 }

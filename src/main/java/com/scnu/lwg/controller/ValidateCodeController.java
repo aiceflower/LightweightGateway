@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @Controller()
-@RequestMapping(value = "/validate")
+@RequestMapping(value = "/lwg/validate")
 public class ValidateCodeController {
 
 	@Resource

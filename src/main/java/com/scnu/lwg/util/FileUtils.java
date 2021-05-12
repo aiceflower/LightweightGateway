@@ -1,6 +1,11 @@
 package com.scnu.lwg.util;
 
-import java.io.*;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 /**
  * @author Kin
@@ -8,18 +13,15 @@ import java.io.*;
  * @email kinsanities@sina.com
  * @time 2021/5/10 8:54 下午
  */
-
+@Slf4j
 public class FileUtils {
-	private static String classPath = Thread.currentThread().getContextClassLoader().getResource("native").getPath();
-	private static String fileName = "wb_sm4.key";
-	private static String filepath = classPath + File.separator + fileName;
 
 	/**
 	 * 将字节流转换成文件
 	 * @param data
 	 * @throws Exception
 	 */
-	public static void saveFile(byte [] data){
+	public static void saveFile(String filepath, byte [] data){
 		try {
 			if(data != null){
 				File file  = new File(filepath);
@@ -41,9 +43,15 @@ public class FileUtils {
 	 *
 	 * @return
 	 */
-	public static byte[] fileConvertToByteArray() {
+	public static byte[] fileConvertToByteArray(String filepath) {
 		byte[] data = null;
 		try {
+			File f = new File(filepath);
+			System.out.println("wb file path:" + filepath);
+			if (!f.exists()){
+				log.error("file not exists.");
+				return null;
+			}
 			FileInputStream fis = new FileInputStream(filepath);
 			ByteArrayOutputStream bao = new ByteArrayOutputStream();
 			int len;

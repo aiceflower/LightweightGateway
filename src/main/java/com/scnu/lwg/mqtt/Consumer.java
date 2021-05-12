@@ -104,6 +104,7 @@ public class Consumer {
 					param.put("data", cryptoUtils.wbSm4Enc(str));
 					param.put("token", token);
 					String resp = httpCli.doPost(url, param);
+					System.out.println("request finished, the response is: " + resp);
 					log.info("msg {} request finished, the response is {}", msg, resp);
 				}
 

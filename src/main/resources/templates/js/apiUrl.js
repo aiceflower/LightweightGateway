@@ -1,1 +1,1 @@
-let my_api_server_url = 'http://localhost:9900/';
+let my_api_server_url = 'https://www.kinsanity.cn/';

@@ -46,6 +46,11 @@ public class LWGTokenInterceptor implements HandlerInterceptor
             return true;
         }
 
+        if(request.getRequestURI().startsWith("/lwg/validate/code"))
+        {
+            return true;
+        }
+
         //get other request header
         String authHeader = request.getHeader(Constants.TOKEN_HEADER);
 
