@@ -14,7 +14,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,11 +33,22 @@ public class Consumer {
 	 * mqtt server url
 	 */
 	@Value("${mqtt.broker}")
-	private final String broker = "tcp://39.96.89.236:1883";
+	private String broker;
+	/**
+	 * mqtt username
+	 */
+	@Value("${mqtt.username}")
+	private String username;
+	/**
+	 * mqtt password
+	 */
+	@Value("${mqtt.password}")
+	private String password;
 	/**
 	 * mqtt topic
 	 */
-	private final String topic = "LWG/MQTT/TOPIC";
+	@Value("#{'${mqtt.topics}'.split(',')}")
+	private String[] topics;
 	/**
 	 * mqtt client id
 	 */
@@ -50,6 +60,7 @@ public class Consumer {
 	private boolean start;
 	@Value("${mqtt.url}")
 	private String url;
+
 	@Resource
 	OkHttpCli httpCli;
 
@@ -64,7 +75,7 @@ public class Consumer {
 				@Override
 				public void connectionLost(Throwable throwable) {
 					try {
-						//重联
+						//reconnect
 						subClient.reconnect();
 					} catch (MqttException e) {
 						e.printStackTrace();
@@ -73,38 +84,27 @@ public class Consumer {
 				}
 
 				@Override
-				public void messageArrived(String s, MqttMessage mqttMessage) {
+				public void messageArrived(String topic, MqttMessage mqttMessage) {
 					String msg = new String(mqttMessage.getPayload());
 					if (StringUtils.isEmpty(msg)){
 						log.error("receive error msg.");
 						return;
 					}
 
-					HumitureMqttVo humiture = null;
-					try {
-						humiture = JSONUtils.jsonToObj(msg, HumitureMqttVo.class);
-					} catch (IOException e) {
-						log.error("parse message {} error.", msg);
-					}
+					log.info("From topic: {} , Receive msg {}", topic, msg);
+					String[] msgs = msg.split(" ");
+					String deviceId = topic.split("/")[1];
+					HumitureMqttVo humiture = new HumitureMqttVo();
+					humiture.setDeviceId(deviceId);
+					humiture.setHumidity(Float.valueOf(msgs[0]));
+					humiture.setTemperature(Float.valueOf(msgs[1]));
+					humiture.setCreateTime(new Date());
+					humiture.setSign(SignUtil.sign(humiture));
 
-					log.info("From topic: {} , Receive msg {}", s, msg);
-					HumitureMqttVo vo = new HumitureMqttVo();
-					vo.setDeviceId(humiture.getDeviceId());
-					vo.setHumidity(humiture.getHumidity());
-					vo.setTemperature(humiture.getTemperature());
-					vo.setCreateTime(new Date());
-					vo.setSign(SignUtil.sign(humiture));
-					String token = humiture.getToken();
-					if (StringUtils.isEmpty(token)){
-						log.error("invalid request. token is null.");
-						return;
-					}
-					String str = JSONUtils.objToJson(vo);
+					String str = JSONUtils.objToJson(humiture);
 					Map<String, String> param = new HashMap<>(1);
 					param.put("data", cryptoUtils.wbSm4Enc(str));
-					param.put("token", token);
-					String resp = httpCli.doPost(url, param);
-					System.out.println("request finished, the response is: " + resp);
+					String resp = httpCli.doPost(url + "/lwg/humiture/send", param);
 					log.info("msg {} request finished, the response is {}", msg, resp);
 				}
 
@@ -114,7 +114,8 @@ public class Consumer {
 				}
 
 			});
-			subClient.subscribe(topic);
+			//subscribe topics
+			subClient.subscribe(topics);
 		}
 	}
 
@@ -127,6 +128,14 @@ public class Consumer {
 			MqttClient pubClient = new MqttClient(broker, clientId, new MemoryPersistence());
 			MqttConnectOptions connectOptions = new MqttConnectOptions();
 			connectOptions.setCleanSession(false);
+
+			//set username and password
+			if (!StringUtils.isEmpty(username)){
+				connectOptions.setUserName(username);
+			}
+			if (!StringUtils.isEmpty(password)){
+				connectOptions.setPassword(password.toCharArray());
+			}
 			pubClient.connect(connectOptions);
 			log.info("mqtt consumer Connecting to broker:{} success.", broker);
 			return pubClient;

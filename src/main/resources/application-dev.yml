@@ -70,12 +70,14 @@ lwg:
       appSecret: 123
     - appId: test
       appSecret: test123
-
 # mqtt config
 mqtt:
   broker: tcp://39.96.89.236:1883 #url
+  username: lwg
+  password: lwgscnu2021
+  topics: 'WifiDHT/+/DHT11,LWG/MQTT/TOPIC'
   start: true #start server
-  url: http://localhost:9900/lwg/humiture/send
+  url: http://localhost:9900
   lib:
     crypto: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/LightweightGateway/src/main/resources/native/libwbcrypto.dylib'
     jni: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/LightweightGateway/src/main/resources/native/libmain.dylib'

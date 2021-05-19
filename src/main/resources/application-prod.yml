@@ -74,13 +74,17 @@ lwg:
 
 # mqtt config
 mqtt:
-  broker: tcp://39.96.89.236:1883 #url
+  broker: tcp://192.168.13.223:11883 #url
+  username: lwg
+  password: lwgscnu2021
+  topics: 'WifiDHT/+/DHT11,LWG/MQTT/TOPIC'
   start: true #start server
-  url: http://localhost:9900/lwg/humiture/send
+  url: https://www.kinsanity.cn
   lib:
-    crypto: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/LightweightGateway/src/main/resources/native/libwbcrypto.dylib'
-    jni: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/LightweightGateway/src/main/resources/native/libmain.dylib'
-
+    crypto: '/home/pi/Desktop/lwg/java/package/lib/libwbcrypto.so'
+    jni: '/home/pi/Desktop/lwg/java/package/lib/libmain.so'
+  wb:
+    filepath: '/home/pi/Desktop/lwg/java/package/lib/wb_sm4.key'
 # okhttp
 ok:
   http:

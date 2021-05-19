@@ -46,7 +46,14 @@ public class LWGTokenInterceptor implements HandlerInterceptor
             return true;
         }
 
+        //pass validate code
         if(request.getRequestURI().startsWith("/lwg/validate/code"))
+        {
+            return true;
+        }
+
+        //pass humiture data
+        if(request.getRequestURI().startsWith("/lwg/humiture"))
         {
             return true;
         }
