@@ -21,10 +21,10 @@ mqtt:
   start: true #start consumer server
   url: https://www.kinsanity.cn
   lib:
-    crypto: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/LightweightGateway/src/main/resources/native/libwbcrypto.dylib'
-    jni: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/LightweightGateway/src/main/resources/native/libmain.dylib'
+    crypto: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/lwg/lwg-client/src/main/resources/native/libwbcrypto.dylib'
+    jni: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/lwg/lwg-client/src/main/resources/native/libmain.dylib'
   wb:
-    filepath: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/LightweightGateway/src/main/resources/native/wb_sm4.key'
+    filepath: '/Users/alonglamp/Desktop/other/postgraduate/pro/crypto/lwg/lwg-client/src/main/resources/native/wb_sm4.key'
 
 # okhttp
 ok:

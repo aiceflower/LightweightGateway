@@ -5,4 +5,4 @@ server:
 #环境 dev:开发 |test:测试 |prod:生产
 spring:
   profiles:
-    active: prod
+    active: dev
