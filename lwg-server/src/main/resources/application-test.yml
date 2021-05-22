@@ -53,17 +53,6 @@ spring:
           enabled: true
           paths: /**
 
-#配置日志文件参数
-logging:
-  file:
-    path: classpath:/logs/admin.log
-  level:
-    org:
-      springframework: debug
-    hibernate: debug
-
-
-
 # default user configuration
 lwg:
   users:
@@ -74,17 +63,17 @@ lwg:
 
 # mqtt config
 mqtt:
-  broker: tcp://192.168.13.223:11883 #url
+  broker: tcp://39.96.89.236:1883 #url
   username: lwg
   password: lwgscnu2021
   topics: 'WifiDHT/+/DHT11,LWG/MQTT/TOPIC'
-  start: true #start server
+  start: false #start consumer server
   url: https://www.kinsanity.cn
   lib:
-    crypto: '/home/pi/Desktop/lwg/java/package/lib/libwbcrypto.so'
-    jni: '/home/pi/Desktop/lwg/java/package/lib/libmain.so'
+    crypto: '/root/hjf/lwg/package/lib/libwbcrypto.so'
+    jni: '/root/hjf/lwg/package/lib/libmain.so'
   wb:
-    filepath: '/home/pi/Desktop/lwg/java/package/lib/wb_sm4.key'
+    filepath: '/root/hjf/lwg/package/lib/wb_sm4.key'
 # okhttp
 ok:
   http:

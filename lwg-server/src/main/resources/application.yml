@@ -1,0 +1,8 @@
+#端口
+server:
+  port: 9900
+
+#环境 dev:开发 |test:测试 |prod:生产
+spring:
+  profiles:
+    active: dev

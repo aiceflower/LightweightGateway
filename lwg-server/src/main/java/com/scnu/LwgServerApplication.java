@@ -12,9 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  */
 @SpringBootApplication
 @EnableJpaAuditing
-public class LightweightGatewayApplication {
+public class LwgServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LightweightGatewayApplication.class, args);
+		SpringApplication.run(LwgServerApplication.class, args);
 	}
 }

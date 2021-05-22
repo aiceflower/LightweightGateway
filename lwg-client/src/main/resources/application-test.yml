@@ -1,0 +1,36 @@
+# 项目端口
+server:
+  #连接超时，单位为毫秒，-1永不超时
+  connection-timeout: 60000
+  #设置tomcat参数
+  tomcat:
+    uri-encoding: utf-8
+    max-connections: 10000
+    min-spare-threads: 10
+    #最大220个并发，可以达到不丢包（可以自己实测），默认为200。
+    max-threads: 220
+    #配置访问路径，默认为/
+    #servlet:
+    #context-path: /index/main
+
+# mqtt config
+mqtt:
+  broker: tcp://39.96.89.236:1883 #url
+  username: lwg
+  password: lwgscnu2021
+  topics: 'WifiDHT/+/DHT11,LWG/MQTT/TOPIC'
+  start: false #start consumer server
+  url: https://www.kinsanity.cn
+  lib:
+    crypto: '/root/hjf/lwg/package/lib/libwbcrypto.so'
+    jni: '/root/hjf/lwg/package/lib/libmain.so'
+  wb:
+    filepath: '/root/hjf/lwg/package/lib/wb_sm4.key'
+# okhttp
+ok:
+  http:
+    connect-timeout: 30
+    read-timeout: 30
+    write-timeout: 30
+    max-idle-connections: 200
+    keep-alive-duration: 300

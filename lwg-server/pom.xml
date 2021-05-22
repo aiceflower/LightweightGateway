@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.scnu</groupId>
-    <artifactId>lightweight-gateway</artifactId>
+    <artifactId>lwg-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>LightweightGateway</name>
-    <description>lightweight gateway project</description>
+    <name>lwg-server</name>
+    <description>lightweight gateway server project</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -123,7 +123,7 @@
     </dependencies>
 
     <build>
-        <finalName>lightweight-gateway</finalName>
+        <finalName>lwg-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
