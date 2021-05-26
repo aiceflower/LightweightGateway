@@ -5,13 +5,16 @@
   
 ## project structure
   -- lwg-client: temperature and humidity data collection client.
+  
   -- lwg-server: temperature and humidity data collection server.
+  
   -- html: temperature and humidity display page.
   
 ## env prepare
   - java8
   - mqtt server
   - mysql 
+  - nginx
 
 ## Run
 ```
