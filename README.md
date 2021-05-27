@@ -11,6 +11,8 @@
   -- lwg-server: temperature and humidity data collection server.
   
   -- html: temperature and humidity display page.
+  -- package: client and server run package.
+  -- shell: client and server run shell script.
   
 ## env prepare
   - java8
@@ -87,4 +89,4 @@
 4. reboot nginx
 5. visit http://nginx_ip:nginx_port/view
 
-  
+
