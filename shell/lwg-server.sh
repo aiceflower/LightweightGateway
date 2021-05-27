@@ -1,7 +1,7 @@
 #!/bin/bash
 #config
 #port
-LWG_SERVER_PORT=9700
+LWG_SERVER_PORT=9900
 
 #mysql url user/pwd
 LWG_MYSQL_URL=jdbc:mysql://39.96.89.236:3306/lwg?characterEncoding=utf8
