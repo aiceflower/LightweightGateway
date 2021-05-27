@@ -24,7 +24,7 @@
 
 ## run client
 1. git clone https://github.com/aiceflower/LightweightGateway.git
-2. modify shell/lwg-client.sh config
+2. modify /path/to/LightweightGateway/shell/lwg-client.sh config
 ```shell
   #client port
   LWG_SERVER_PORT=9700
@@ -41,8 +41,8 @@
 
  
   #log path
-  LOG_HOME=/home/pi/logs
-  # war file path
+  LOG_HOME=/path/to/logs
+  # war file path: /path/to/LightweightGateway/package
   PACKAGE_HOME=/path/to/package
 ```
 3. sh lwg-client.sh start
@@ -50,7 +50,7 @@
 
 ## run server
 1. git clone https://github.com/aiceflower/LightweightGateway.git
-2. modify shell/lwg-server.sh config
+2. modify /path/to/LightweightGateway/shell/lwg-server.sh config
 ```shell
   LWG_SERVER_PORT=9900
 
@@ -64,8 +64,8 @@
   LWG_USERS_APPSECRET=lwgscnu2021
 
   #log path
-  LOG_HOME=/home/pi/logs
-  # war file path
+  LOG_HOME=/path/to/logs
+  # war file path: /path/to/LightweightGateway/package
   PACKAGE_HOME=/path/to/package
 ```
 3. sh lwg-server.sh start
