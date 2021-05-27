@@ -3,13 +3,11 @@ package com.scnu.lwg.mqtt;
 import com.scnu.lwg.util.CryptoUtils;
 import com.scnu.lwg.util.JSONUtils;
 import com.scnu.lwg.util.OkHttpCli;
-import com.scnu.lwg.web.util.SignUtil;
 import com.scnu.lwg.web.vo.HumitureMqttVo;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +23,6 @@ import java.util.Map;
  * @time 2021/5/1 10:01 下午
  */
 
-@Component
 @Slf4j
 public class Consumer {
 
@@ -99,11 +96,10 @@ public class Consumer {
 					humiture.setHumidity(Float.valueOf(msgs[0]));
 					humiture.setTemperature(Float.valueOf(msgs[1]));
 					humiture.setCreateTime(new Date());
-					humiture.setSign(SignUtil.sign(humiture));
 
 					String str = JSONUtils.objToJson(humiture);
 					Map<String, String> param = new HashMap<>(1);
-					param.put("data", cryptoUtils.wbSm4Enc(str));
+					param.put("data", str);
 					String resp = httpCli.doPost(url + "/lwg/humiture/send", param);
 					log.info("msg {} request finished, the response is {}", msg, resp);
 				}

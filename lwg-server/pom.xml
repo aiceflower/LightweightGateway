@@ -108,18 +108,13 @@
             <artifactId>okhttp</artifactId>
             <version>3.8.0</version>
         </dependency>
-        <!--java cpp
+
+        <!--JNA-->
         <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacpp</artifactId>
-            <version>1.5.5</version>
-        </dependency>-->
-        <!--javaCV
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
-            <version>1.5.4</version>
-        </dependency>-->
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>4.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

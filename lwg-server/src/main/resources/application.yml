@@ -1,8 +1,73 @@
-#端口
+# 项目端口
 server:
-  port: 9900
+  port: ${LWG_SERVER_PORT:9900}
+  #连接超时，单位为毫秒，-1永不超时
+  connection-timeout: 60000
+  #设置tomcat参数
+  tomcat:
+    uri-encoding: utf-8
+    max-connections: 10000
+    min-spare-threads: 10
+    #最大220个并发，可以达到不丢包（可以自己实测），默认为200。
+    max-threads: 220
+    #配置访问路径，默认为/
+    #servlet:
+    #context-path: /index/main
 
-#环境 dev:开发 |test:测试 |prod:生产
 spring:
-  profiles:
-    active: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: ${LWG_MYSQL_URL:jdbc:mysql://39.96.89.236:3306/lwg?characterEncoding=utf8}
+    username: ${LWG_MYSQL_USERNAME:lwgtest}
+    password: ${LWG_MYSQL_PASSWORD:!@#Lwgtest2021}
+    #max active
+    maxActive: 20
+    #init size
+    initialSize: 1
+    #max wait time
+    maxWait: 60000
+    #open PSCache，and set single PSCache size
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    #via connectionProperties open mergeSql, slow sql record
+    #connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 from dual
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    #configuration monitor statistics filters，monitor page statistics sql,'wall' use in firewall
+    filters: stat, wall, log4j
+  jpa:
+    properties:
+      hibernate:
+      show_sql: true
+      format_sql: true
+
+# default user configuration
+lwg:
+  users:
+    - appId: ${LWG_USERS_APPID:lwg}
+      appSecret: ${LWG_USERS_APPSECRET:lwgscnu2021}
+    - appId: test
+      appSecret: test123
+# mqtt config
+mqtt:
+  broker: ${LWG_MQTT_BROKER:tcp://192.168.13.223:11883} #url
+  username: ${LWG_MQTT_USERNAME:lwg}
+  password: ${LWG_MQTT_PASSWORD:lwgscnu2021}
+  topics: ${LWG_MQTT_TOPICS:WifiDHT/+/DHT11,LWG/MQTT/TOPIC}
+  start: ${LWG_MQTT_START:false} #start consumer server
+  url: ${LWG_MQTT_URL:https://www.kinsanity.cn}
+
+# okhttp
+ok:
+  http:
+    connect-timeout: 30
+    read-timeout: 30
+    write-timeout: 30
+    max-idle-connections: 200
+    keep-alive-duration: 300

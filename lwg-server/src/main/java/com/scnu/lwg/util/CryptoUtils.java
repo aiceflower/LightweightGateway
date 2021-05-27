@@ -2,7 +2,6 @@ package com.scnu.lwg.util;
 
 import com.scnu.lwg.jni.JniInterface;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
@@ -13,7 +12,6 @@ import javax.annotation.PostConstruct;
  * @email kinsanities@sina.com
  * @time 2021/5/10 7:07 上午
  */
-@Component
 public class CryptoUtils {
 
 	@Value("${mqtt.lib.crypto}")

@@ -1,9 +1,7 @@
 package com.scnu.lwg.mqtt;
 
-import com.scnu.lwg.util.CryptoUtils;
 import com.scnu.lwg.util.JSONUtils;
 import com.scnu.lwg.util.OkHttpCli;
-import com.scnu.lwg.util.SignUtil;
 import com.scnu.lwg.entity.HumitureMqttVo;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
@@ -64,9 +62,6 @@ public class Consumer {
 	@Resource
 	OkHttpCli httpCli;
 
-	@Resource
-	CryptoUtils cryptoUtils;
-
 	@PostConstruct
 	public void init() throws MqttException {
 		if (start){
@@ -99,15 +94,13 @@ public class Consumer {
 					humiture.setHumidity(Float.valueOf(msgs[0]));
 					humiture.setTemperature(Float.valueOf(msgs[1]));
 					humiture.setCreateTime(new Date());
-					humiture.setSign(SignUtil.sign(humiture));
 
 					String str = JSONUtils.objToJson(humiture);
 					Map<String, String> param = new HashMap<>(1);
-					param.put("data", cryptoUtils.wbSm4Enc(str));
+					param.put("data", str);
 					String resp = httpCli.doPost(url + "/lwg/humiture/send", param);
 					log.info("msg {} request finished, the response is {}", msg, resp);
 				}
-
 				@Override
 				public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
 					System.out.println("deliveryComplete");
