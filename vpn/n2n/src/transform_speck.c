@@ -77,7 +77,18 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
 			       const uint8_t * inbuf,
 			       size_t in_len,
 			       const uint8_t * peer_mac) {
-  int len=-1;
+  int len=0;
+  transop_wbsm4_t* priv = (transop_wbsm4_t *)arg->priv;
+  if ( out_len >= in_len )
+  {
+      unsigned char iv_enc[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+      WBCRYPTO_wbsm4_cbc_encrypt(inbuf, in_len, outbuf, out_len, priv->enc_ctx, iv_enc);
+      len = in_len;
+  }
+  else
+  {
+      traceEvent( TRACE_DEBUG, "encode_null %lu too big for packet buffer", in_len );        
+  }
   /*
   transop_wbsm4_t * priv = (transop_wbsm4_t *)arg->priv;
 
@@ -107,8 +118,6 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
   } else
     traceEvent(TRACE_ERROR, "encode_speck inbuf too big to encrypt.");
   */
-  memcpy( outbuf, inbuf, in_len );
-  len = in_len;
   return len;
 }
 
@@ -122,6 +131,17 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
 			       size_t in_len,
 			       const uint8_t * peer_mac) {
   int len=0;
+  transop_wbsm4_t* priv = (transop_wbsm4_t *)arg->priv;
+  if ( out_len >= in_len )
+  {
+      unsigned char iv_dec[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+      WBCRYPTO_wbsm4_cbc_decrypt(inbuf, in_len, outbuf, out_len, priv->dec_ctx, iv_dec);
+      len = in_len;
+  }
+  else
+  {
+      traceEvent( TRACE_NORMAL, "decode_wbsm4 %lu too big for packet buffer", in_len );        
+  }
   /*
    transop_wbsm4_t* priv = (transop_wbsm4_t *)arg->priv;
 
@@ -152,7 +172,6 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
   } else
   traceEvent(TRACE_ERROR, "decode_speck inbuf wrong size (%ul) to decrypt.", in_len);
   */
-  memcpy( outbuf, inbuf, in_len );
   return in_len;
 }
 
