@@ -31,7 +31,7 @@ int main()
     //init
     n2n_transop_speck_init(&conf, &transop_speck);
 
-    run_transop_benchmark("transop_speck", &transop_speck, &conf, pktbuf);
+    //run_transop_benchmark("transop_speck", &transop_speck, &conf, pktbuf);
 
     transop_speck.deinit(&transop_speck);
 

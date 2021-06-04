@@ -165,7 +165,7 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib DESTINATION ${PROJECT_BINARY_DIR})
 
 link_directories(${PROJECT_BINARY_DIR}/lib)
 add_executable(test-wblib tools/test_wblib.c)
-target_link_libraries(test-wblib wbcrypto)
+target_link_libraries(test-wblib n2n)
 
 find_library(PCAP_LIB pcap)
 if(PCAP_LIB)
