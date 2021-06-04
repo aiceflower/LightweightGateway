@@ -807,7 +807,7 @@ int main(int argc, char* argv[]) {
   edge_init_conf_defaults(&conf);
   memset(&ec, 0, sizeof(ec));
   ec.mtu = DEFAULT_MTU;
-  ec.daemon = 1;    /* By default run in daemon mode. */
+  ec.daemon = 0;    /* By default run in daemon mode. */
 
 #ifndef WIN32
   if(((pw = getpwnam("n2n")) != NULL) ||

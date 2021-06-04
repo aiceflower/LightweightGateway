@@ -409,6 +409,7 @@ int n2n_transop_cc20_init(const n2n_edge_conf_t *conf, n2n_trans_op_t *ttt);
 #endif
 int n2n_transop_speck_init(const n2n_edge_conf_t *conf, n2n_trans_op_t *ttt);
 int n2n_transop_wbsm4_init (const n2n_edge_conf_t *conf, n2n_trans_op_t *ttt);
+void n2n_print(unsigned char * in, size_t len);
 
 /* Log */
 void setTraceLevel(int level);

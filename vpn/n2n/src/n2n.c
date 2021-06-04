@@ -80,6 +80,17 @@ void setTraceFile(FILE *f) {
   traceFile = f;
 }
 
+void n2n_print(unsigned char * in, size_t len){
+    int i;
+    for(i = 0; i < len; i++) {
+        printf("%.2X ", in[i]);
+        if((i+1)%16==0) {
+            printf("\n");
+        }
+    }
+    printf("\n");
+}
+
 void closeTraceFile() {
   if (traceFile != NULL && traceFile != stdout) {
     fclose(traceFile);

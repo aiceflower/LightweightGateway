@@ -64,17 +64,6 @@ static void set_speck_iv(transop_wbsm4_t *priv, n2n_speck_ivec_t ivec) {
   }
 }
 
-void printchar(unsigned char * in, size_t len){
-    int i;
-    for(i = 0; i < len; i++) {
-        printf("%.2X ", in[i]);
-        if((i+1)%16==0) {
-            printf("\n");
-        }
-    }
-    printf("\n");
-}
-
 static void copyAdd(uint8_t * outbuf, const uint8_t * inbuf, size_t in_len){
   int k = 3;
   int i;
@@ -108,18 +97,30 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
       
                                     0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10};
       printf("wbsm4 encode. in_len=%d, out_len=%d\n", in_len, out_len);
-      fflush(stdout);
+      
+      uint8_t PKT_CONTENT[]={
+  0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15, 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+  0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15, 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+      
+      /*
       WBCRYPTO_sm4_context *sm4_ctx;
       sm4_ctx=WBCRYPTO_sm4_context_init();
-      uint8_t sm4_out[2000];
+      
+      
       WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
-      printchar(inbuf, in_len);
-      WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, sm4_out, in_len, sm4_ctx, iv_enc);
-      printf("........sm4 enc:\n");
-      printchar(sm4_out, in_len);
-      copyAdd(outbuf, inbuf, in_len);
-      printchar(outbuf, in_len);
+      
+      
+      WBCRYPTO_sm4_cbc_encrypt(PKT_CONTENT, sizeof(PKT_CONTENT), sm4_out, sizeof(PKT_CONTENT), sm4_ctx, iv_enc);
+      */
+      uint8_t sm4_out[2000];
+      n2n_print(inbuf, in_len);
+      WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->sm4_ctx, iv_enc);
+      printf(".................sm4 enc:\n");
+      n2n_print(outbuf, in_len);
+      
+      //copyAdd(outbuf, inbuf, in_len);
       len = in_len;
+      fflush(stdout);
   }
   else
   {
@@ -178,21 +179,31 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
       uint8_t sm4_key[16] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
                                     0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10};
       
-      fflush(stdout);
+      
+      uint8_t pk_con[] = {0x26, 0x77, 0xF4, 0x6B, 0x09, 0xC1, 0x22, 0xCC, 0x97, 0x55, 0x33, 0x10, 0x5B, 0xD4, 0xA2, 0x2A, 
+0xB2, 0x9A, 0x3C, 0x8C, 0x3F, 0xC0, 0x06, 0x50, 0xB3, 0xDD, 0xF3, 0x99, 0x6B, 0xA3, 0xC5, 0x83, 
+0x5D, 0x27, 0xE0, 0xC0, 0x7C, 0x81, 0x5E, 0x82, 0xE0, 0x48, 0xEE, 0x8E, 0x6E, 0x17, 0x28, 0x46, 
+0x6A, 0x68, 0xA3, 0xDA, 0xB5, 0x9D, 0xCB, 0x5A, 0x16, 0x40, 0x23, 0x48, 0xCC, 0x5C, 0x03, 0xCA};
+      /*
       WBCRYPTO_sm4_context *sm4_ctx;
       sm4_ctx=WBCRYPTO_sm4_context_init();
       uint8_t sm4_out[2000];
       WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
-      WBCRYPTO_sm4_cbc_decrypt(inbuf, in_len, sm4_out, in_len, sm4_ctx, iv_dec);
       
+      
+      WBCRYPTO_sm4_cbc_decrypt(pk_con, sizeof(pk_con), sm4_out, sizeof(pk_con), sm4_ctx, iv_dec);
+      
+      */
+      uint8_t sm4_out[2000];
+      
+      printf("sm4 dec..................:\n");
+      n2n_print(inbuf, in_len);
+      WBCRYPTO_sm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
+      n2n_print(outbuf, in_len);
 
-
-      printchar(inbuf, in_len);
-      printf("sm4 dec...:\n");
-      printchar(sm4_out, in_len);
-      copyAdd(outbuf, inbuf, in_len);
-      printchar(outbuf, in_len);
+      //copyAdd(outbuf, inbuf, in_len);
       len = in_len;
+      fflush(stdout);
   }
   else
   {

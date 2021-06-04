@@ -5,7 +5,8 @@
         "conf.h": "c",
         "sm4.h": "c",
         "wbmatrix.h": "c",
-        "sm3.h": "c"
+        "sm3.h": "c",
+        "random_numbers.h": "c"
     },
     "telemetry.enableCrashReporter": false
 }
