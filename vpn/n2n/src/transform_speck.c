@@ -62,6 +62,14 @@ static void set_speck_iv(transop_wbsm4_t *priv, n2n_speck_ivec_t ivec) {
     memcpy(ivec + i, &rand_value, sizeof(rand_value));
   }
 }
+
+static void copyAdd(uint8_t * outbuf, const uint8_t * inbuf, size_t in_len){
+  int k = 3;
+  int i;
+  for(i = 0; i < in_len; i++){
+    outbuf[i] = inbuf[i] ^ k;
+  }
+}
 /** The Speck packet format consists of:
  *
  *  - a 8-bit speck encoding version in clear text
@@ -83,7 +91,8 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
   {
       unsigned char iv_enc[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
       //WBCRYPTO_wbsm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->enc_ctx, iv_enc);
-      memcpy( outbuf, inbuf, in_len );
+      //memcpy( outbuf, inbuf, in_len );
+      copyAdd(outbuf, inbuf, in_len);
       len = in_len;
   }
   else
@@ -137,7 +146,8 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
   {
       unsigned char iv_dec[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
       //WBCRYPTO_wbsm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
-      memcpy( outbuf, inbuf, in_len);
+      //memcpy( outbuf, inbuf, in_len);
+      copyAdd(outbuf, inbuf, in_len);
       len = in_len;
   }
   else
