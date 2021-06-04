@@ -114,11 +114,11 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
       */
       uint8_t sm4_out[2000];
       n2n_print(inbuf, in_len);
-      WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->sm4_ctx, iv_enc);
+      //WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->sm4_ctx, iv_enc);
       printf(".................sm4 enc:\n");
-      n2n_print(outbuf, in_len);
       
-      //copyAdd(outbuf, inbuf, in_len);
+      copyAdd(outbuf, inbuf, in_len);
+      n2n_print(outbuf, in_len);
       len = in_len;
       fflush(stdout);
   }
@@ -198,10 +198,10 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
       
       printf("sm4 dec..................:\n");
       n2n_print(inbuf, in_len);
-      WBCRYPTO_sm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
-      n2n_print(outbuf, in_len);
+      //WBCRYPTO_sm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
 
-      //copyAdd(outbuf, inbuf, in_len);
+      copyAdd(outbuf, inbuf, in_len);
+      n2n_print(outbuf, in_len);
       len = in_len;
       fflush(stdout);
   }
