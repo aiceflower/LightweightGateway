@@ -40,7 +40,7 @@ uint8_t PKT_CONTENT[]={
 /* Prototypes */
 static ssize_t do_encode_packet( uint8_t * pktbuf, size_t bufsize, const n2n_community_t c );
 static void run_transop_benchmark(const char *op_name, n2n_trans_op_t *op_fn, n2n_edge_conf_t *conf, uint8_t *pktbuf);
-static int perform_decryption = 0;
+static int perform_decryption = 1;
 
 static void usage() {
   fprintf(stderr, "Usage: benchmark [-d]\n"
@@ -123,7 +123,7 @@ static void run_transop_benchmark(const char *op_name, n2n_trans_op_t *op_fn, n2
   n2n_common_t cmn;
   n2n_PACKET_t pkt;
   n2n_mac_t mac_buf;
-  const int target_sec = 3;
+  const int target_sec = 10;
   struct timeval t1;
   struct timeval t2;
   size_t idx;

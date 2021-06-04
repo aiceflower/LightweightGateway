@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
     {
         "name": "Attach to Chrome",
         "port": 9222,
@@ -12,7 +13,7 @@
         "name": "edge-wbsm4",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/edge",
+        "program": "${workspaceFolder}/../../../build/edge",
         "args": ["-c", "n2ntest", "-k", "123456", "-a", "10.1.1.4", "-l", "39.96.89.236:7777", "-A5"],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
@@ -24,7 +25,7 @@
         "name": "edge-twofish",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/edge",
+        "program": "${workspaceFolder}/../../../build/edge",
         "args": ["-c", "n2ntest", "-k", "123456", "-a", "10.1.1.4", "-l", "39.96.89.236:7777"],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
@@ -36,7 +37,7 @@
         "name": "quick_init",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/example_edge_embed_quick_edge_init",
+        "program": "${workspaceFolder}/../../../example_edge_embed_quick_edge_init",
         "args": [],
         "stopAtEntry": false,
         "cwd": "${fileDirname}",
@@ -44,30 +45,30 @@
         "externalConsole": false,
         "MIMode": "lldb"
     },
-        {
-            "name": "(lldb) 启动",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/example_edge_embed",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb"
-        },
-        {
-            "name": "benchmark",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/n2n-benchmark",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb"
-        }
+    {
+        "name": "edge_embed",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/../../../build/example_edge_embed",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb"
+    },
+    {
+        "name": "benchmark",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/../../../build/n2n-benchmark",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb"
+    }
 
     ]
   }

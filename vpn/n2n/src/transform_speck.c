@@ -82,7 +82,8 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
   if ( out_len >= in_len )
   {
       unsigned char iv_enc[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
-      WBCRYPTO_wbsm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->enc_ctx, iv_enc);
+      //WBCRYPTO_wbsm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->enc_ctx, iv_enc);
+      memcpy( outbuf, inbuf, in_len );
       len = in_len;
   }
   else
@@ -135,7 +136,8 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
   if ( out_len >= in_len )
   {
       unsigned char iv_dec[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
-      WBCRYPTO_wbsm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
+      //WBCRYPTO_wbsm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
+      memcpy( outbuf, inbuf, in_len);
       len = in_len;
   }
   else
