@@ -109,12 +109,14 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
                                     0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10};
       printf("wbsm4 encode. in_len=%d, out_len=%d\n", in_len, out_len);
       fflush(stdout);
-      //WBCRYPTO_sm4_context *sm4_ctx;
-      //sm4_ctx=WBCRYPTO_sm4_context_init();
-
-      //WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
-      //WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, sm4_ctx, iv_enc);
+      WBCRYPTO_sm4_context *sm4_ctx;
+      sm4_ctx=WBCRYPTO_sm4_context_init();
+      uint8_t sm4_out[2000];
+      WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
       printchar(inbuf, in_len);
+      WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, sm4_out, in_len, sm4_ctx, iv_enc);
+      printf("........sm4 enc:\n");
+      printchar(sm4_out, in_len);
       copyAdd(outbuf, inbuf, in_len);
       printchar(outbuf, in_len);
       len = in_len;
@@ -171,19 +173,25 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
       unsigned char iv_dec[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
       //WBCRYPTO_wbsm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
       //memcpy( outbuf, inbuf, in_len);
-      printchar(inbuf, in_len);
-      copyAdd(outbuf, inbuf, in_len);
-      printchar(outbuf, in_len);
+      printf("wbsm4 decode. in_len=%d, out_len=%d\n", in_len, out_len);
+      
       uint8_t sm4_key[16] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
                                     0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10};
-      printf("wbsm4 decode. in_len=%d, out_len=%d\n", in_len, out_len);
+      
       fflush(stdout);
-      //WBCRYPTO_sm4_context *sm4_ctx;
-      //sm4_ctx=WBCRYPTO_sm4_context_init();
+      WBCRYPTO_sm4_context *sm4_ctx;
+      sm4_ctx=WBCRYPTO_sm4_context_init();
+      uint8_t sm4_out[2000];
+      WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
+      WBCRYPTO_sm4_cbc_decrypt(inbuf, in_len, sm4_out, in_len, sm4_ctx, iv_dec);
+      
 
-      //WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
-      //WBCRYPTO_sm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, sm4_ctx, iv_dec);
-     
+
+      printchar(inbuf, in_len);
+      printf("sm4 dec...:\n");
+      printchar(sm4_out, in_len);
+      copyAdd(outbuf, inbuf, in_len);
+      printchar(outbuf, in_len);
       len = in_len;
   }
   else
