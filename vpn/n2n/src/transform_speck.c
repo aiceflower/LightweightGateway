@@ -78,6 +78,7 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
 			       size_t in_len,
 			       const uint8_t * peer_mac) {
   int len=-1;
+  /*
   transop_wbsm4_t * priv = (transop_wbsm4_t *)arg->priv;
 
   if(in_len <= N2N_PKT_BUF_SIZE) {
@@ -88,28 +89,26 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
 
       traceEvent(TRACE_DEBUG, "encode_speck %lu bytes", in_len);
 
-      /* Encode the Speck format version. */
       encode_uint8(outbuf, &idx, N2N_SPECK_TRANSFORM_VERSION);
 
-      /* Generate and encode the IV. */
+    
       set_speck_iv(priv, enc_ivec);
       encode_buf(outbuf, &idx, &enc_ivec, N2N_SPECK_IVEC_SIZE);
 
-      /* Encrypt the payload and write the ciphertext after the iv. */
-      /* len is set to the length of the cipher plain text to be encrpyted
-	 which is (in this case) identical to original packet lentgh */
       len = in_len;
 
       WBCRYPTO_wbsm4_cbc_encrypt(inbuf, in_len, outbuf + TRANSOP_SPECK_PREAMBLE_SIZE, out_len, priv->enc_ctx, enc_ivec);
       
       traceEvent(TRACE_DEBUG, "encode_speck: encrypted %u bytes.\n", in_len);
 
-      len += TRANSOP_SPECK_PREAMBLE_SIZE; /* size of data carried in UDP. */
+      len += TRANSOP_SPECK_PREAMBLE_SIZE;
     } else
       traceEvent(TRACE_ERROR, "encode_speck outbuf too small.");
   } else
     traceEvent(TRACE_ERROR, "encode_speck inbuf too big to encrypt.");
-
+  */
+  memcpy( outbuf, inbuf, in_len );
+  len = in_len;
   return len;
 }
 
@@ -123,10 +122,11 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
 			       size_t in_len,
 			       const uint8_t * peer_mac) {
   int len=0;
+  /*
    transop_wbsm4_t* priv = (transop_wbsm4_t *)arg->priv;
 
-  if(((in_len - TRANSOP_SPECK_PREAMBLE_SIZE) <= N2N_PKT_BUF_SIZE) /* Cipher text fits in buffer */
-     && (in_len >= TRANSOP_SPECK_PREAMBLE_SIZE) /* Has at least version, iv */
+  if(((in_len - TRANSOP_SPECK_PREAMBLE_SIZE) <= N2N_PKT_BUF_SIZE) 
+     && (in_len >= TRANSOP_SPECK_PREAMBLE_SIZE) 
   )
   {
     size_t rem=in_len;
@@ -135,14 +135,12 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
     
     n2n_speck_ivec_t dec_ivec = {0};
 
-    /* Get the encoding version to make sure it is supported */
     decode_uint8(&speck_enc_ver, inbuf, &rem, &idx );
 
     if(N2N_SPECK_TRANSFORM_VERSION == speck_enc_ver) {
       traceEvent(TRACE_DEBUG, "decode_speck %lu bytes", in_len);
       len = (in_len - TRANSOP_SPECK_PREAMBLE_SIZE);
 
-      /* Get the IV */
       decode_buf((uint8_t *)&dec_ivec, N2N_SPECK_IVEC_SIZE, inbuf, &rem, &idx);
 
       WBCRYPTO_wbsm4_cbc_decrypt(inbuf + TRANSOP_SPECK_PREAMBLE_SIZE, len, outbuf, out_len, priv->dec_ctx, dec_ivec);
@@ -153,8 +151,9 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
       traceEvent(TRACE_ERROR, "decode_speck unsupported Speck version %u.", speck_enc_ver);
   } else
   traceEvent(TRACE_ERROR, "decode_speck inbuf wrong size (%ul) to decrypt.", in_len);
-
-  return len;
+  */
+  memcpy( outbuf, inbuf, in_len );
+  return in_len;
 }
 
 /* ****************************************************** */
