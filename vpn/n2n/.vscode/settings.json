@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "n2n.h": "c",
+        "wbsm4.h": "c",
+        "conf.h": "c",
+        "sm4.h": "c",
+        "wbmatrix.h": "c",
+        "sm3.h": "c"
+    },
+    "telemetry.enableCrashReporter": false
+}
