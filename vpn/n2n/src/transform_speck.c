@@ -30,6 +30,7 @@
 typedef unsigned char n2n_speck_ivec_t[N2N_SPECK_IVEC_SIZE];
 
 typedef struct transop_wbsm4 {
+  WBCRYPTO_sm4_context *sm4_ctx;
   WBCRYPTO_wbsm4_context *enc_ctx;
   WBCRYPTO_wbsm4_context *dec_ctx;		      /* the round keys for payload encryption & decryption */
 } transop_wbsm4_t;
@@ -92,7 +93,8 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
       unsigned char iv_enc[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
       //WBCRYPTO_wbsm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->enc_ctx, iv_enc);
       //memcpy( outbuf, inbuf, in_len );
-      copyAdd(outbuf, inbuf, in_len);
+      WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->sm4_ctx, iv_enc);
+      //copyAdd(outbuf, inbuf, in_len);
       len = in_len;
   }
   else
@@ -147,7 +149,8 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
       unsigned char iv_dec[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
       //WBCRYPTO_wbsm4_cbc_decrypt(inbuf, in_len, outbuf, in_len, priv->dec_ctx, iv_dec);
       //memcpy( outbuf, inbuf, in_len);
-      copyAdd(outbuf, inbuf, in_len);
+      //copyAdd(outbuf, inbuf, in_len);
+      WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->sm4_ctx, iv_dec);
       len = in_len;
   }
   else
@@ -198,11 +201,16 @@ static int setup_speck_key(transop_wbsm4_t *priv, const uint8_t *key, ssize_t ke
   for(i = 0; i < len; i++){
     key_pad[i] = key[i];
   }
+  uint8_t sm4_key[16] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
+                                    0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10};
 
   priv->enc_ctx = WBCRYPTO_wbsm4_context_init();
   priv->dec_ctx = WBCRYPTO_wbsm4_context_init();
-  WBCRYPTO_wbsm4_gen_table_with_dummyrounds(priv->enc_ctx, key_pad, sizeof(key_pad), WBCRYPTO_ENCREYT_MODE, 1);
-  WBCRYPTO_wbsm4_gen_table_with_dummyrounds(priv->dec_ctx, key_pad, sizeof(key_pad), WBCRYPTO_DECREYT_MODE, 1);
+  WBCRYPTO_wbsm4_gen_table_with_dummyrounds(priv->enc_ctx, sm4_key, sizeof(sm4_key), WBCRYPTO_ENCREYT_MODE, 1);
+  WBCRYPTO_wbsm4_gen_table_with_dummyrounds(priv->dec_ctx, sm4_key, sizeof(sm4_key), WBCRYPTO_DECREYT_MODE, 1);
+  
+  priv->sm4_ctx = WBCRYPTO_sm4_context_init();
+  WBCRYPTO_sm4_init_key(priv->sm4_ctx, sm4_key, sizeof(sm4_key));
 
   traceEvent(TRACE_DEBUG, "speck key setup completed\n");
 
