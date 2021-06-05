@@ -110,6 +110,7 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
       WBCRYPTO_sm4_context *sm4_ctx;
       sm4_ctx=WBCRYPTO_sm4_context_init();
       uint8_t sm4_out[2000];
+      unsigned char iv_dec[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
       WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
       WBCRYPTO_sm4_cbc_decrypt(pk_con, sizeof(pk_con), sm4_out, sizeof(pk_con), sm4_ctx, iv_dec);
       printf("enc#################################");
@@ -125,7 +126,7 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
       
       WBCRYPTO_sm4_cbc_encrypt(PKT_CONTENT, sizeof(PKT_CONTENT), sm4_out, sizeof(PKT_CONTENT), sm4_ctx, iv_enc);
       */
-      uint8_t sm4_out[2000];
+      
       n2n_print(inbuf, in_len);
       //WBCRYPTO_sm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->sm4_ctx, iv_enc);
       printf(".................sm4 enc:\n");
