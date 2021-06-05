@@ -206,7 +206,6 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
       printf("dec#################################")
       n2n_print(sm4_out, sizeof(sm4_out));
       
-      uint8_t sm4_out[2000];
       
       printf("sm4 dec..................:\n");
       n2n_print(inbuf, in_len);
