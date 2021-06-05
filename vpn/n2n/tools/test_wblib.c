@@ -1,39 +1,30 @@
 #include <stdio.h>
 #include "n2n.h"
 
-//test util
-//print string in hexadecimal
-void TEST_print_state(unsigned char * in, size_t len);
-
-void TEST_print_state(unsigned char * in, size_t len){
-    int i;
-    for(i = 0; i < len; i++) {
-        printf("%.2X ", in[i]);
-        if((i+1)%16==0) {
-            printf("\n");
-        }
-    }
-    printf("\n");
-}
-
 int main()
 {
-    uint8_t pktbuf[N2N_PKT_BUF_SIZE];
-    n2n_trans_op_t transop_speck;
+    static const unsigned char key[16]={0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
+                                    0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10};
+    unsigned char iv_enc[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+    unsigned char iv_dec[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+    WBCRYPTO_wbsm4_context *wbsm4_ctx_enc, *wbsm4_ctx_dec;
+    wbsm4_ctx_enc=WBCRYPTO_wbsm4_context_init();
+    wbsm4_ctx_dec=WBCRYPTO_wbsm4_context_init();
 
-    n2n_edge_conf_t conf;
 
-    // Init configuration
-    edge_init_conf_defaults(&conf);
-    strncpy((char*)conf.community_name, "abc123def456", sizeof(conf.community_name));
-    conf.encrypt_key = "SoMEVer!S$cUREPassWORD";
-    
-    //init
-    n2n_transop_speck_init(&conf, &transop_speck);
+    uint8_t pk_con[] = {0x26, 0x77, 0xF4, 0x6B, 0x09, 0xC1, 0x22, 0xCC, 0x97, 0x55, 0x33, 0x10, 0x5B, 0xD4, 0xA2, 0x2A, 
+0xB2, 0x9A, 0x3C, 0x8C, 0x3F, 0xC0, 0x06, 0x50, 0xB3, 0xDD, 0xF3, 0x99, 0x6B, 0xA3, 0xC5, 0x83, 
+0x5D, 0x27, 0xE0, 0xC0, 0x7C, 0x81, 0x5E, 0x82, 0xE0, 0x48, 0xEE, 0x8E, 0x6E, 0x17, 0x28, 0x46, 
+0x6A, 0x68, 0xA3, 0xDA, 0xB5, 0x9D, 0xCB, 0x5A, 0x16, 0x40, 0x23, 0x48, 0xCC, 0x5C, 0x03, 0xCA};
+    uint8_t cipher[300];
+    uint8_t plan[300];
 
-    //run_transop_benchmark("transop_speck", &transop_speck, &conf, pktbuf);
-
-    transop_speck.deinit(&transop_speck);
-
+    WBCRYPTO_wbsm4_gen_table_with_dummyrounds(wbsm4_ctx_enc, key, sizeof(key), WBCRYPTO_ENCREYT_MODE, 1);
+    WBCRYPTO_wbsm4_gen_table_with_dummyrounds(wbsm4_ctx_dec, key, sizeof(key), WBCRYPTO_DECREYT_MODE, 1);
+    n2n_print(pk_con, sizeof(pk_con));
+    WBCRYPTO_wbsm4_cbc_encrypt(pk_con, sizeof(pk_con), cipher, 300, wbsm4_ctx_enc, iv_enc);
+    n2n_print(cipher, sizeof(pk_con));
+    WBCRYPTO_wbsm4_cbc_decrypt(cipher,sizeof(pk_con), plan, sizeof(plan),wbsm4_ctx_dec,iv_dec);
+    n2n_print(plan, sizeof(pk_con));
     return 0;
 }
