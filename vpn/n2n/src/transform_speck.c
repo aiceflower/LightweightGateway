@@ -112,7 +112,7 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
       uint8_t sm4_out[2000];
       WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
       WBCRYPTO_sm4_cbc_decrypt(pk_con, sizeof(pk_con), sm4_out, sizeof(pk_con), sm4_ctx, iv_dec);
-      printf("enc#################################")
+      printf("enc#################################");
       n2n_print(sm4_out, sizeof(sm4_out));
 
       /*
@@ -203,7 +203,7 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
       uint8_t sm4_out[2000];
       WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
       WBCRYPTO_sm4_cbc_decrypt(pk_con, sizeof(pk_con), sm4_out, sizeof(pk_con), sm4_ctx, iv_dec);
-      printf("dec#################################")
+      printf("dec#################################");
       n2n_print(sm4_out, sizeof(sm4_out));
       
       
