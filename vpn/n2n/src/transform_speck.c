@@ -91,8 +91,7 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
   if ( out_len >= in_len )
   {
       unsigned char iv_enc[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
-      //WBCRYPTO_wbsm4_cbc_encrypt(inbuf, in_len, outbuf, in_len, priv->enc_ctx, iv_enc);
-      //memcpy( outbuf, inbuf, in_len );
+      
       printf("wbsm4 encode. in_len=%d, out_len=%d\n", in_len, out_len);
       
       uint8_t PKT_CONTENT[]={
@@ -107,6 +106,7 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
 0x5D, 0x27, 0xE0, 0xC0, 0x7C, 0x81, 0x5E, 0x82, 0xE0, 0x48, 0xEE, 0x8E, 0x6E, 0x17, 0x28, 0x46, 
 0x6A, 0x68, 0xA3, 0xDA, 0xB5, 0x9D, 0xCB, 0x5A, 0x16, 0x40, 0x23, 0x48, 0xCC, 0x5C, 0x03, 0xCA};
       
+      /*
       WBCRYPTO_sm4_context *sm4_ctx;
       sm4_ctx=WBCRYPTO_sm4_context_init();
       uint8_t sm4_out[2000];
@@ -114,8 +114,9 @@ static int transop_encode_speck(n2n_trans_op_t * arg,
       WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
       WBCRYPTO_sm4_cbc_decrypt(pk_con, sizeof(pk_con), sm4_out, sizeof(pk_con), sm4_ctx, iv_dec);
       printf("enc#################################");
-      n2n_print(sm4_out, sizeof(sm4_out));
-
+      n2n_print(sm4_out, sizeof(in_len));
+      */
+     
       /*
       WBCRYPTO_sm4_context *sm4_ctx;
       sm4_ctx=WBCRYPTO_sm4_context_init();
@@ -199,14 +200,15 @@ static int transop_decode_speck(n2n_trans_op_t * arg,
 0x5D, 0x27, 0xE0, 0xC0, 0x7C, 0x81, 0x5E, 0x82, 0xE0, 0x48, 0xEE, 0x8E, 0x6E, 0x17, 0x28, 0x46, 
 0x6A, 0x68, 0xA3, 0xDA, 0xB5, 0x9D, 0xCB, 0x5A, 0x16, 0x40, 0x23, 0x48, 0xCC, 0x5C, 0x03, 0xCA};
       
+      /*
       WBCRYPTO_sm4_context *sm4_ctx;
       sm4_ctx=WBCRYPTO_sm4_context_init();
       uint8_t sm4_out[2000];
       WBCRYPTO_sm4_init_key(sm4_ctx, sm4_key, sizeof(sm4_key));
       WBCRYPTO_sm4_cbc_decrypt(pk_con, sizeof(pk_con), sm4_out, sizeof(pk_con), sm4_ctx, iv_dec);
       printf("dec#################################");
-      n2n_print(sm4_out, sizeof(sm4_out));
-      
+      n2n_print(sm4_out, sizeof(in_len));
+      */
       
       printf("sm4 dec..................:\n");
       n2n_print(inbuf, in_len);
